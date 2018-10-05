@@ -71,6 +71,42 @@ exports.createPages = ({ graphql, actions }) => {
     })
   })
 
+  const loadWork = new Promise((resolve, reject) => {
+    graphql(`
+      {
+        allContentfulWork(
+          sort: { fields: [publishDate], order: DESC }
+          limit: 10000
+        ) {
+          edges {
+            node {
+              slug
+              publishDate
+            }
+          }
+        }
+      }
+    `).then(result => {
+      const works = result.data.allContentfulWork.edges
+
+      // Create each individual post
+      works.forEach((edge, i) => {
+        const prev = i === 0 ? null : works[i - 1].node
+        const next = i === works.length - 1 ? null : works[i + 1].node
+        createPage({
+          path: `${edge.node.slug}/`,
+          component: path.resolve(`./src/templates/work.js`),
+          context: {
+            slug: edge.node.slug,
+            prev,
+            next,
+          },
+        })
+      })
+      resolve()
+    })
+  })
+
   const loadTags = new Promise((resolve, reject) => {
     graphql(`
       {
@@ -138,5 +174,5 @@ exports.createPages = ({ graphql, actions }) => {
     })
   })
 
-  return Promise.all([loadPosts, loadTags, loadPages])
+  return Promise.all([loadPosts, loadWork, loadTags, loadPages])
 }
