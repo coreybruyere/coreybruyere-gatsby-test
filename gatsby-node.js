@@ -1,9 +1,7 @@
 const config = require('./src/utils/siteConfig')
 const path = require(`path`)
-
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions
-
   const loadPosts = new Promise((resolve, reject) => {
     graphql(`
       {
@@ -26,7 +24,6 @@ exports.createPages = ({ graphql, actions }) => {
       const numPages = Math.ceil(
         posts.slice(postsPerFirstPage).length / postsPerPage
       )
-
       // Create main home page
       createPage({
         path: `/`,
@@ -38,7 +35,6 @@ exports.createPages = ({ graphql, actions }) => {
           currentPage: 1,
         },
       })
-
       // Create additional pagination on home page if needed
       Array.from({ length: numPages }).forEach((_, i) => {
         createPage({
@@ -52,7 +48,6 @@ exports.createPages = ({ graphql, actions }) => {
           },
         })
       })
-
       // Create each individual post
       posts.forEach((edge, i) => {
         const prev = i === 0 ? null : posts[i - 1].node
@@ -70,43 +65,6 @@ exports.createPages = ({ graphql, actions }) => {
       resolve()
     })
   })
-
-  const loadWork = new Promise((resolve, reject) => {
-    graphql(`
-      {
-        allContentfulWork(
-          sort: { fields: [publishDate], order: DESC }
-          limit: 10000
-        ) {
-          edges {
-            node {
-              slug
-              publishDate
-            }
-          }
-        }
-      }
-    `).then(result => {
-      const works = result.data.allContentfulWork.edges
-
-      // Create each individual post
-      works.forEach((edge, i) => {
-        const prev = i === 0 ? null : works[i - 1].node
-        const next = i === works.length - 1 ? null : works[i + 1].node
-        createPage({
-          path: `${edge.node.slug}/`,
-          component: path.resolve(`./src/templates/work.js`),
-          context: {
-            slug: edge.node.slug,
-            prev,
-            next,
-          },
-        })
-      })
-      resolve()
-    })
-  })
-
   const loadTags = new Promise((resolve, reject) => {
     graphql(`
       {
@@ -124,9 +82,9 @@ exports.createPages = ({ graphql, actions }) => {
     `).then(result => {
       const tags = result.data.allContentfulTag.edges
       const postsPerPage = config.postsPerPage
-
       // Create tag pages with pagination if needed
       tags.map(({ node }) => {
+        console.table(node.post)
         const totalPosts = node.post.length
         const numPages = Math.ceil(totalPosts / postsPerPage)
         Array.from({ length: numPages }).forEach((_, i) => {
@@ -147,7 +105,6 @@ exports.createPages = ({ graphql, actions }) => {
       resolve()
     })
   })
-
   const loadPages = new Promise((resolve, reject) => {
     graphql(`
       {
@@ -173,6 +130,5 @@ exports.createPages = ({ graphql, actions }) => {
       resolve()
     })
   })
-
-  return Promise.all([loadPosts, loadWork, loadTags, loadPages])
+  return Promise.all([loadPosts, loadTags, loadPages])
 }
