@@ -30,12 +30,11 @@ const WorkTemplate = ({ data, pageContext }) => {
       <Helmet>
         <title>{`${title} - ${config.siteTitle}`}</title>
       </Helmet>
-      <SEO pagePath={slug} postNode={workNode} postSEO />
+      {/* <SEO pagePath={slug} postNode={workNode} postSEO /> */}
 
       <Hero title={title} image={heroImage} height={'50vh'} />
 
       <Container>
-        WORK!
         {tags && <TagList tags={tags} />}
         <PostDate date={publishDate} />
         <PageBody body={body} />

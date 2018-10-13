@@ -88,25 +88,26 @@ exports.createPages = ({ graphql, actions }) => {
       }
     `).then(result => {
       const works = result.data.allContentfulWork.edges
-      const worksPerFirstPage = config.postsPerHomePage
-      const worksPerPage = config.postsPerPage
-      const numPages = Math.ceil(
-        works.slice(worksPerFirstPage).length / worksPerPage
-      )
+      // const worksPerFirstPage = config.postsPerHomePage
+      // const worksPerPage = config.postsPerPage
+      // const numPages = Math.ceil(
+      //   works.slice(worksPerFirstPage).length / worksPerPage
+      // )
 
       // Create main home page
-      createPage({
-        path: `/`,
-        component: path.resolve(`./src/templates/work.js`),
-        context: {
-          limit: worksPerFirstPage,
-          skip: 0,
-          numPages: numPages + 1,
-          currentPage: 1,
-        },
-      })
+      // createPage({
+      //   path: `/`,
+      //   component: path.resolve(`./src/templates/work.js`),
+      //   context: {
+      //     limit: worksPerFirstPage,
+      //     skip: 0,
+      //     numPages: numPages + 1,
+      //     currentPage: 1,
+      //   },
+      // })
 
       works.forEach((edge, i) => {
+        console.log(edge)
         const prev = i === 0 ? null : works[i - 1].node
         const next = i === works.length - 1 ? null : works[i + 1].node
         createPage({
@@ -144,7 +145,6 @@ exports.createPages = ({ graphql, actions }) => {
       // Create tag pages with pagination if needed
       tags.map(({ node }) => {
         console.log(node.post)
-        console.log(node.slug)
       })
       resolve()
     })
