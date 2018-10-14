@@ -18,13 +18,28 @@ exports.createPages = ({ graphql, actions }) => {
             }
           }
         }
+        # Split into fragment
+        allContentfulWork(
+          sort: { fields: [publishDate], order: DESC }
+          limit: 10000
+        ) {
+          edges {
+            node {
+              slug
+              publishDate
+            }
+          }
+        }
       }
     `).then(result => {
       const posts = result.data.allContentfulPost.edges
+      const works = result.data.allContentfulWork.edges
+      const combinedModels = [...posts, ...works]
+      console.log(combinedModels)
       const postsPerFirstPage = config.postsPerHomePage
       const postsPerPage = config.postsPerPage
       const numPages = Math.ceil(
-        posts.slice(postsPerFirstPage).length / postsPerPage
+        combinedModels.slice(postsPerFirstPage).length / postsPerPage
       )
 
       // Create main home page
@@ -54,9 +69,10 @@ exports.createPages = ({ graphql, actions }) => {
       })
 
       // Create each individual post
-      posts.forEach((edge, i) => {
-        const prev = i === 0 ? null : posts[i - 1].node
-        const next = i === posts.length - 1 ? null : posts[i + 1].node
+      combinedModels.forEach((edge, i) => {
+        const prev = i === 0 ? null : combinedModels[i - 1].node
+        const next =
+          i === combinedModels.length - 1 ? null : combinedModels[i + 1].node
         createPage({
           path: `${edge.node.slug}/`,
           component: path.resolve(`./src/templates/post.js`),
@@ -107,7 +123,7 @@ exports.createPages = ({ graphql, actions }) => {
       // })
 
       works.forEach((edge, i) => {
-        console.log(edge)
+        // console.log(edge)
         const prev = i === 0 ? null : works[i - 1].node
         const next = i === works.length - 1 ? null : works[i + 1].node
         createPage({
@@ -144,7 +160,7 @@ exports.createPages = ({ graphql, actions }) => {
 
       // Create tag pages with pagination if needed
       tags.map(({ node }) => {
-        console.log(node.post)
+        // console.log(node.post)
       })
       resolve()
     })

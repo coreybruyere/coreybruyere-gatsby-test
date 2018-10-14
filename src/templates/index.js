@@ -11,7 +11,9 @@ import config from '../utils/siteConfig'
 
 const Index = ({ data, pageContext }) => {
   const posts = data.allContentfulPost.edges
-  const featuredPost = posts[0].node
+  const works = data.allContentfulWork.edges
+  const combinedModels = [...posts, ...works]
+  const featuredPost = combinedModels[0].node
   const { currentPage } = pageContext
   const isFirstPage = currentPage === 1
 
@@ -27,13 +29,13 @@ const Index = ({ data, pageContext }) => {
         {isFirstPage ? (
           <CardList>
             <Card {...featuredPost} featured />
-            {posts.slice(1).map(({ node: post }) => (
+            {combinedModels.slice(1).map(({ node: post }) => (
               <Card key={post.id} {...post} />
             ))}
           </CardList>
         ) : (
           <CardList>
-            {posts.map(({ node: post }) => (
+            {combinedModels.map(({ node: post }) => (
               <Card key={post.id} {...post} />
             ))}
           </CardList>
@@ -47,6 +49,32 @@ const Index = ({ data, pageContext }) => {
 export const query = graphql`
   query($skip: Int!, $limit: Int!) {
     allContentfulPost(
+      sort: { fields: [publishDate], order: DESC }
+      limit: $limit
+      skip: $skip
+    ) {
+      edges {
+        node {
+          title
+          id
+          slug
+          publishDate(formatString: "MMMM DD, YYYY")
+          heroImage {
+            title
+            fluid(maxWidth: 1800) {
+              ...GatsbyContentfulFluid_withWebp_noBase64
+            }
+          }
+          body {
+            childMarkdownRemark {
+              html
+              excerpt(pruneLength: 80)
+            }
+          }
+        }
+      }
+    }
+    allContentfulWork(
       sort: { fields: [publishDate], order: DESC }
       limit: $limit
       skip: $skip
