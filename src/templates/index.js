@@ -12,8 +12,8 @@ import config from '../utils/siteConfig'
 const Index = ({ data, pageContext }) => {
   const posts = data.allContentfulPost.edges
   const works = data.allContentfulWork.edges
-  const combinedModels = [...posts, ...works]
-  const featuredPost = combinedModels[0].node
+  // const combinedModels = [...posts, ...works]
+  const featuredPost = posts[0].node
   const { currentPage } = pageContext
   const isFirstPage = currentPage === 1
 
@@ -29,17 +29,24 @@ const Index = ({ data, pageContext }) => {
         {isFirstPage ? (
           <CardList>
             <Card {...featuredPost} featured />
-            {combinedModels.slice(1).map(({ node: post }) => (
+            {posts.slice(1).map(({ node: post }) => (
               <Card key={post.id} {...post} />
             ))}
           </CardList>
         ) : (
           <CardList>
-            {combinedModels.map(({ node: post }) => (
+            {posts.map(({ node: post }) => (
               <Card key={post.id} {...post} />
             ))}
           </CardList>
         )}
+
+        <h2>work</h2>
+        <CardList>
+          {works.map(({ node: post }) => (
+            <Card key={post.id} {...post} />
+          ))}
+        </CardList>
         <Pagination context={pageContext} />
       </Container>
     </Layout>

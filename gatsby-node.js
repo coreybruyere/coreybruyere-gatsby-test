@@ -33,13 +33,13 @@ exports.createPages = ({ graphql, actions }) => {
       }
     `).then(result => {
       const posts = result.data.allContentfulPost.edges
-      const works = result.data.allContentfulWork.edges
-      const combinedModels = [...posts, ...works]
-      console.log(combinedModels)
+      // const works = result.data.allContentfulWork.edges
+      // const combinedModels = [...posts, ...works]
       const postsPerFirstPage = config.postsPerHomePage
       const postsPerPage = config.postsPerPage
       const numPages = Math.ceil(
-        combinedModels.slice(postsPerFirstPage).length / postsPerPage
+        // combinedModels.slice(postsPerFirstPage).length / postsPerPage
+        posts.slice(postsPerFirstPage).length / postsPerPage
       )
 
       // Create main home page
@@ -69,10 +69,9 @@ exports.createPages = ({ graphql, actions }) => {
       })
 
       // Create each individual post
-      combinedModels.forEach((edge, i) => {
-        const prev = i === 0 ? null : combinedModels[i - 1].node
-        const next =
-          i === combinedModels.length - 1 ? null : combinedModels[i + 1].node
+      posts.forEach((edge, i) => {
+        const prev = i === 0 ? null : posts[i - 1].node
+        const next = i === posts.length - 1 ? null : posts[i + 1].node
         createPage({
           path: `${edge.node.slug}/`,
           component: path.resolve(`./src/templates/post.js`),
@@ -157,10 +156,24 @@ exports.createPages = ({ graphql, actions }) => {
     `).then(result => {
       const tags = result.data.allContentfulTag.edges
       const postsPerPage = config.postsPerPage
-
       // Create tag pages with pagination if needed
       tags.map(({ node }) => {
-        // console.log(node.post)
+        const totalPosts = node.post.length
+        const numPages = Math.ceil(totalPosts / postsPerPage)
+        Array.from({ length: numPages }).forEach((_, i) => {
+          createPage({
+            path:
+              i === 0 ? `/tag/${node.slug}/` : `/tag/${node.slug}/${i + 1}/`,
+            component: path.resolve(`./src/templates/tag.js`),
+            context: {
+              slug: node.slug,
+              limit: postsPerPage,
+              skip: i * postsPerPage,
+              numPages: numPages,
+              currentPage: i + 1,
+            },
+          })
+        })
       })
       resolve()
     })
