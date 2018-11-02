@@ -1,15 +1,19 @@
 import React from 'react'
-import styled from 'styled-components'
+import { withTheme } from 'styled-components'
 import { rem } from 'polished'
 
-const Wrapper = styled.section`
-  margin: 0 auto;
-  max-width: ${props => rem(props.theme.maxWidths[7])};
-  padding: 3em 1.5em 2em;
-`
+import { Grid, Item } from './Grid'
 
-const Container = props => {
-  return <Wrapper>{props.children}</Wrapper>
+const Container = ({ theme, children }) => {
+  return (
+    <Grid
+      gridTemplateColumns={`1fr minmax(auto, ${rem(
+        theme.breakpoints[2]
+      )})  minmax(auto, ${rem(theme.maxWidths[1])}) 2fr`}
+    >
+      <Item gridColumn="2 / span 1">{children}</Item>
+    </Grid>
+  )
 }
 
-export default Container
+export default withTheme(Container)
