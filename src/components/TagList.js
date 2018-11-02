@@ -4,7 +4,7 @@ import { Link } from 'gatsby'
 
 const List = styled.ul`
   margin: 0 auto 2em auto;
-  max-width: ${props => props.theme.sizes.maxWidthCentered};
+  max-width: ${props => props.theme.maxWidth[7]};
 `
 
 const Tag = styled.li`

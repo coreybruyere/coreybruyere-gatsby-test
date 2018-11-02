@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
+import { rem } from 'polished'
 
 const Header = styled.header`
   background: ${props => props.theme.colors.base};
@@ -9,7 +10,7 @@ const Header = styled.header`
 `
 const Nav = styled.nav`
   width: 100%;
-  max-width: ${props => props.theme.sizes.maxWidth};
+  max-width: ${props => rem(props.theme.maxWidths[7])};
   margin: 0 auto;
   padding: 0 1.5em;
 

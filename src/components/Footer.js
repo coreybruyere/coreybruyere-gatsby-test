@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { rem } from 'polished'
 
 const Wrapper = styled.footer`
   display: flex;
@@ -7,7 +8,7 @@ const Wrapper = styled.footer`
   justify-content: space-between;
   align-items: flex-start;
   margin: 0 auto;
-  max-width: ${props => props.theme.sizes.maxWidth};
+  max-width: ${props => rem(props.theme.maxWidths[7])};
 `
 
 const List = styled.ul`
@@ -25,7 +26,7 @@ const Item = styled.li`
   display: inline-block;
   padding: 0.25em 0;
   width: 100%;
-  @media screen and (min-width: ${props => props.theme.responsive.small}) {
+  @media screen and (min-width: ${props => props.theme.breakpoints[0]}) {
     width: auto;
   }
   a {

@@ -10,11 +10,11 @@ const Post = styled.li`
   margin: 0 0 1em 0;
   width: 100%;
   transition: background 0.2s;
-  @media screen and (min-width: ${props => props.theme.responsive.small}) {
+  @media screen and (min-width: ${props => props.theme.breakpoints[0]}) {
     flex: ${props => (props.featured ? '0 0 100%' : '0 0 49%')};
     margin: 0 0 2vw 0;
   }
-  @media screen and (min-width: ${props => props.theme.responsive.medium}) {
+  @media screen and (min-width: ${props => props.theme.breakpoints[1]}) {
     flex: ${props => (props.featured ? '0 0 100%' : '0 0 32%')};
   }
   &:hover {
@@ -30,7 +30,7 @@ const Post = styled.li`
     .gatsby-image-wrapper {
       height: 0;
       padding-bottom: 60%;
-      @media screen and (min-width: ${props => props.theme.responsive.small}) {
+      @media screen and (min-width: ${props => props.theme.breakpoints[0]}) {
         padding-bottom: ${props => (props.featured ? '40%' : '60%')};
       }
     }

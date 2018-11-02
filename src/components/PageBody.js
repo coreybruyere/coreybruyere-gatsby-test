@@ -1,10 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
+import { rem } from 'polished'
+
 require('prismjs/themes/prism.css')
 
 const Body = styled.div`
   margin: 0 auto;
-  max-width: ${props => props.theme.sizes.maxWidthCentered};
+  max-width: ${props => rem(props.theme.maxWidths[7])};
 
   h1,
   h2,

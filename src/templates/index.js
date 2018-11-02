@@ -1,7 +1,6 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
-import CardList from '../components/CardList'
 import Card from '../components/Card'
 import Helmet from 'react-helmet'
 import Container from '../components/Container'
@@ -27,26 +26,24 @@ const Index = ({ data, pageContext }) => {
       )}
       <Container>
         {isFirstPage ? (
-          <CardList>
+          <React.Fragment>
             <Card {...featuredPost} featured />
             {posts.slice(1).map(({ node: post }) => (
               <Card key={post.id} {...post} />
             ))}
-          </CardList>
+          </React.Fragment>
         ) : (
-          <CardList>
+          <React.Fragment>
             {posts.map(({ node: post }) => (
               <Card key={post.id} {...post} />
             ))}
-          </CardList>
+          </React.Fragment>
         )}
 
         <h2>work</h2>
-        <CardList>
-          {works.map(({ node: post }) => (
-            <Card key={post.id} {...post} />
-          ))}
-        </CardList>
+        {works.map(({ node: post }) => (
+          <Card key={post.id} {...post} />
+        ))}
         <Pagination context={pageContext} />
       </Container>
     </Layout>

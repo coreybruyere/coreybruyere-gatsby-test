@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
+import { rem } from 'polished'
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
-  max-width: ${props => props.theme.sizes.maxWidthCentered};
+  max-width: ${props => rem(props.theme.maxWidths[7])};
   a {
     background: ${props => props.theme.colors.base};
     color: white;

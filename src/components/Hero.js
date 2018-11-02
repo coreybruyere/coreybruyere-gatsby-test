@@ -1,6 +1,7 @@
 import React from 'react'
 import Img from 'gatsby-image'
 import styled from 'styled-components'
+import { rem } from 'polished'
 
 const Wrapper = styled.section`
   position: relative;
@@ -14,7 +15,7 @@ const BgImg = styled(Img)`
   z-index: -1;
   min-height: 300px;
   height: auto;
-  @media (min-width: ${props => props.theme.responsive.small}) {
+  @media (min-width: ${props => props.theme.breakpoints[0]}) {
     height: ${props => props.height || 'auto'};
   }
   & > img {
@@ -41,7 +42,7 @@ const Title = styled.h1`
   font-weight: 600;
   position: absolute;
   width: 100%;
-  max-width: ${props => props.theme.sizes.maxWidthCentered};
+  max-width: ${props => rem(props.theme.maxWidths[7])};
   padding: 0 1rem;
   top: 50%;
   left: 50%;
